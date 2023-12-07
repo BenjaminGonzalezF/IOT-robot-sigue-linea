@@ -7,8 +7,6 @@
 #define distanciaObstaculo 10
 #define umbralLinea 500
 
-//Servo Golpe;
-
 void setup() {
   Serial.begin(9600);
 
@@ -39,11 +37,11 @@ void seguirLinea() {
 
   if (valorCentral < umbralLinea) {
     avanzar(255);
-  } else {
-    if (valorIzquierdo < umbralLinea) {
-      girarIzquierda(255);
-    } else if (valorDerecho < umbralLinea) {
-      girarDerecha(255);
+  } 
+  if (valorIzquierdo < umbralLinea) {
+    girarIzquierda(255);
+  } else if (valorDerecho < umbralLinea) {
+    girarDerecha(255);
     }
   }
 }
@@ -75,5 +73,4 @@ void buscarObstaculos() {
 
 void loop() {
   buscarObstaculos();
-
 }
