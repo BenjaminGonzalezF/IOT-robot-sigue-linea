@@ -1,129 +1,67 @@
+#include "KnightRoboticsLibs_Iroh.h"
+#include <NewPing.h>
+#include <Servo.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-#include "direcciones.h"
 
-
-int velocidad = 60;
-
-int motorIzquierdo1 = 6; 
-int motorIzquierdo2 = 5; 
-int motorDerecho1 = 3; 
-int motorDerecho2 = 11; 
-
-int rightProximityPin = 10;
-int leftProximityPin = 2;
-
-int sensorLineaDerecho = A0;
-int sensorLineaCentral = A1;
-int sensorLineaIzquierdo = A2;
-
-LiquidCrystal_I2C lcd(0x3F, 20, 4);
-
-
-void inicializarCabezaRobot(){
-
-  Yaw.attach(7);  
-  Pitch.attach(8);
-  Tilt.attach(9);
-  
-  moverServoYaw(90);
-  moverServoPitch(40);
-
-}
-
-void inicializarMovimientoRobot() {
-  pinMode(motorIzquierdo1, OUTPUT);
-  pinMode(motorIzquierdo2, OUTPUT);
-  pinMode(motorDerecho1, OUTPUT);
-  pinMode(motorDerecho2, OUTPUT);
-
-  digitalWrite(motorIzquierdo1, HIGH);
-  digitalWrite(motorIzquierdo2, HIGH);
-  digitalWrite(motorDerecho1, HIGH);
-  digitalWrite(motorDerecho2, HIGH);
-}
+#define distanciaObstaculo 10
+#define umbralLinea 500
 
 void setup() {
-  lcd.init();
-  lcd.backlight();
-  lcd.setCursor(0, 0);
-  lcd.print("Iniciando motores!");
-  inicializarMovimientoRobot();
-  pinMode(rightProximityPin, INPUT);
-  pinMode(leftProximityPin, INPUT);
   Serial.begin(9600);
+
+  inicializarMovimientoRobot();
+  inicializarPantallaRobot();
+  inicializarCabezaRobot();
+  inicializarGolpeRobot();
+  inicializarSensores();
+  inicializarPantalla();
+
+  // Se endereza
+  moverServoPitch(0);
 }
 
-void mostrarPorPantalla(String texto){
-  lcd.clear();
-  lcd.print(texto);
-
+void quitarObstaculo() {
+  detenerse();
+  moverTilt(0);
+  delay(500);
+  moverTilt(120);
+  delay(500);
 }
 
-int leerSensorObstaculoIzquierdo() {
-  return digitalRead(leftProximityPin);
-}
-
-int leerSensorObstaculoDerecho() {
-  return digitalRead(rightProximityPin);
-}
-
-
-void girarDerecha(int vel){
-  digitalWrite(motorIzquierdo1, HIGH);
-  digitalWrite(motorDerecho2, HIGH);
-  analogWrite(motorIzquierdo2, velocidad);
-  analogWrite(motorDerecho1, velocidad);
-}
-
-void girarIzquierda(int vel){
-  digitalWrite(motorIzquierdo2, HIGH);
-  digitalWrite(motorDerecho1, HIGH);
-  analogWrite(motorIzquierdo1, velocidad);
-  analogWrite(motorDerecho2, velocidad);
-
-}
-
-void retroceder() {
-  digitalWrite(motorIzquierdo1, HIGH);
-  digitalWrite(motorDerecho1, HIGH);
-  analogWrite(motorIzquierdo2, velocidad);
-  analogWrite(motorDerecho2, velocidad);
-}
-
-void avanzar() {
-  digitalWrite(motorIzquierdo1, LOW);
-  digitalWrite(motorDerecho1, LOW);
-}
-
-int leerSensorLineaIzquierdo() {
-  return analogRead(sensorLineaIzquierdo);
-}
-
-int leerSensorLineaCentral() {
-  return analogRead(sensorLineaCentral);
-}
-
-int leerSensorLineaDerecho() {
-  return analogRead(sensorLineaDerecho);
-}
-
-void loop() {
+void seguirLinea() {
   int valorCentral = leerSensorLineaCentral();
   int valorIzquierdo = leerSensorLineaIzquierdo();
   int valorDerecho = leerSensorLineaDerecho();
-  
-  int umbral = 500;
 
-  if (valorCentral < umbral) {
+  if (valorCentral < umbralLinea) {
     avanzar();
   } else {
-    if (valorIzquierdo < umbral) {
+    if (valorIzquierdo < umbralLinea) {
       girarIzquierda();
-    } else if (valorDerecho < umbral) {
-      girarDerecha()
-    } else {
-      retroceder();
+    } else if (valorDerecho < umbralLinea) {
+      girarDerecha();
     }
   }
+}
+
+void buscarObstaculos() {
+  int DistSonar;
+
+  for (int i = 45; i <= 120; i++) {
+    DistSonar = leerDistanciaSonar();
+
+    moverServoYaw(i);
+
+    if (DistSonar > distanciaObstaculo) {
+      seguirLinea();
+    } else {
+      quitarObstaculo();
+    }
+  }
+}
+
+void loop() {
+  buscarObstaculos();
+
 }
