@@ -1,4 +1,4 @@
-#include "KnightRoboticsLibs_Iroh.h"
+#include KnightRoboticsLibs_Iroh.h
 #include <NewPing.h>
 #include <Servo.h>
 #include <Wire.h>
@@ -7,6 +7,7 @@
 #define distanciaObstaculo 10
 #define umbralLinea 150
 #define velocidad 70
+#define delay 3
 
 void setup() {
   Serial.begin(9600);
@@ -38,15 +39,16 @@ void seguirLinea() {
 
   if (valorCentral < umbralLinea) {
     avanzar(velocidad);
+    delay(delay);
   } 
 
   if (valorIzquierdo < umbralLinea) {
     girarIzquierda(velocidad);
-    delay(10);
+    delay(delay);
 
   } else if (valorDerecho < umbralLinea) {
     girarDerecha(velocidad);
-    delay(10);
+    delay(delay);
     }
   }
 
@@ -69,7 +71,7 @@ void buscarObstaculos() {
   for (int i = 45; i <= 120; i++) {
     DistSonar = leerDistanciaSonar();
     Serial.println(DistSonar);
-    mostrarPantallaDist(DistSonar);
+    //mostrarPantallaDist(DistSonar);
     moverServoYaw(i);
     comprobarSeguimiento(DistSonar);
   }
@@ -77,7 +79,7 @@ void buscarObstaculos() {
   for (int i = 120; i > 45; i--) {
     DistSonar = leerDistanciaSonar();
     Serial.println(DistSonar);
-    mostrarPantallaDist(DistSonar);
+    //mostrarPantallaDist(DistSonar);
     moverServoYaw(i);
     comprobarSeguimiento(DistSonar);
   }

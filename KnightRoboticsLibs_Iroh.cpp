@@ -182,9 +182,9 @@ void girarDerecha(int vel){
 	}
 	
   digitalWrite(motorIzquierdo1, HIGH);
-  digitalWrite(motorDerecho2, HIGH);
-  analogWrite(motorIzquierdo2, 255-vel);
-  analogWrite(motorDerecho1, 255-vel);
+  digitalWrite(motorDerecho2, LOW);
+  analogWrite(motorIzquierdo2, vel);
+  analogWrite(motorDerecho1, 0);
 
 }
 
@@ -195,10 +195,10 @@ void girarIzquierda(int vel){
 	movement=4;
 	}
 	
-  digitalWrite(motorIzquierdo2, HIGH);
-  digitalWrite(motorDerecho1, HIGH);
-  analogWrite(motorIzquierdo1, 255-vel);
-  analogWrite(motorDerecho2, 255-vel);
+  digitalWrite(motorIzquierdo1, LOW);
+  digitalWrite(motorDerecho2, HIGH);
+  analogWrite(motorIzquierdo2, 0);
+  analogWrite(motorDerecho1, vel);
 
 }
 
@@ -325,12 +325,12 @@ void inicializarPantallaRobot(){
   if (versionPantalla == 1){
      lcd.init();               
      lcd.backlight(); 
-     escribirPantalla(1, 0, "KnightRobotics");
+     escribirPantalla(1, 0, "Serllet - Benjamin");
      }
   else if(versionPantalla == 2){
      lcd2.init();               
      lcd2.backlight(); 
-     escribirPantalla(1, 0, "KnightRobotics");
+     escribirPantalla(1, 0, "Serllet - Benjamin");
      }
   
   //delay(1000);
@@ -363,12 +363,12 @@ void inicializarPantalla(){
   if (versionPantalla == 1){
      lcd.init();               
      lcd.backlight(); 
-     escribirPantalla(1, 0, "KnightRobotics");
+     escribirPantalla(1, 0, "Serllet - Benjamin");
      }
   else if(versionPantalla == 2){
      lcd2.init();               
      lcd2.backlight(); 
-     escribirPantalla(1, 0, "KnightRobotics");
+     escribirPantalla(1, 0, "Serllet - Benjamin");
      }
   
   //delay(1000);
