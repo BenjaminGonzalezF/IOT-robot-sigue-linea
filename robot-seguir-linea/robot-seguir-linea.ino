@@ -1,4 +1,4 @@
-#include KnightRoboticsLibs_Iroh.h
+#include "KnightRoboticsLibs_Iroh.h"
 #include <NewPing.h>
 #include <Servo.h>
 #include <Wire.h>
@@ -6,49 +6,66 @@
 
 #define distanciaObstaculo 10
 #define umbralLinea 150
-#define velocidad 70
-#define delay 3
+#define velocidad 136
+#define tiempoMoverse 0
 
 void setup() {
   Serial.begin(9600);
 
   inicializarMovimientoRobot();
-  inicializarPantallaRobot();
+  //inicializarPantallaRobot();
   inicializarCabezaRobot();
   inicializarGolpeRobot();
   inicializarSensores();
-  inicializarPantalla();
-
   // Se endereza
-  moverServoPitch(0);
+  moverServoPitch(10);
 }
 
 void quitarObstaculo() {
+  //escribirPantalla(1, 1, "Quito obstaculo");
   moverServoGolpe(-1); // Mueve a la izquierda
   delay(250);          
   moverServoGolpe(0);  // Centra el servo
   delay(250);          
   moverServoGolpe(1);  // Mueve a la derecha
   delay(250);
+  
 }
+
+boolean detecIzquierdo(int valorIzquierdo){
+  if(valorIzquierdo < umbralLinea){
+    return true;
+  }
+  return false;
+}
+
+boolean detecDerecho(int valorDerecho){
+  if(valorDerecho < umbralLinea){
+    return true;
+  }
+  return false;
+}
+
+
+
 
 void seguirLinea() {
   int valorCentral = leerSensorLineaCentral();
   int valorIzquierdo = leerSensorLineaIzquierdo();
   int valorDerecho = leerSensorLineaDerecho();
-
-  if (valorCentral < umbralLinea) {
+  if()
+  if(valorIzquierdo > umbralLinea && valorDerecho > umbralLinea ){
     avanzar(velocidad);
-    delay(delay);
-  } 
-
-  if (valorIzquierdo < umbralLinea) {
+    //escribirPantalla(1, 1, "Avanzando");
+    delay(tiempoMoverse);
+  }else if (valorIzquierdo < umbralLinea) {
     girarIzquierda(velocidad);
-    delay(delay);
-
+    //escribirPantalla(1, 1, "Izquierda");
+    delay(tiempoMoverse);
   } else if (valorDerecho < umbralLinea) {
     girarDerecha(velocidad);
-    delay(delay);
+    //escribirPantalla(1, 1, "Derecha");
+    delay(tiempoMoverse);
     }
   }
 
@@ -67,14 +84,15 @@ void comprobarSeguimiento(int DistSonar){
 void buscarObstaculos() {
   
   int DistSonar;
+  DistSonar = leerDistanciaSonar();
 
-  for (int i = 45; i <= 120; i++) {
+/*   for (int i = 45; i <= 120; i++) {
     DistSonar = leerDistanciaSonar();
     Serial.println(DistSonar);
     //mostrarPantallaDist(DistSonar);
-    moverServoYaw(i);
+    moverServoYaw(i); */
     comprobarSeguimiento(DistSonar);
-  }
+/*   }
 
   for (int i = 120; i > 45; i--) {
     DistSonar = leerDistanciaSonar();
@@ -82,32 +100,12 @@ void buscarObstaculos() {
     //mostrarPantallaDist(DistSonar);
     moverServoYaw(i);
     comprobarSeguimiento(DistSonar);
-  }
+  } */
 }
-void mostrarPantallaDist(int DistSonar){
-    // IMPRIMIR RESULTADO POR SERIAL
-  
-  Serial.print("SONAR =" );    
-  Serial.print(DistSonar);
-  Serial.print("\t");
-  
-  // MOSTRAR INFORMACION EN PANTALLA LCD
-  if (DistSonar>99){
-      escribirPantalla(6, 1, DistSonar);
-  }
-  else if (DistSonar<=99 && DistSonar>=10){
-    
-      escribirPantalla(6, 1, 0);
-      escribirPantalla(7, 1, DistSonar);
-  }
-  else{
-      escribirPantalla(6, 1, "00");
-      escribirPantalla(8, 1, DistSonar);
-  }
-  
-  // Espera 
-  delay(100);    
-}
+
 void loop() {
   buscarObstaculos();
+
+
+
 }
