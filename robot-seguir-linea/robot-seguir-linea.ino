@@ -23,6 +23,7 @@ void setup() {
 
 void quitarObstaculo() {
   //escribirPantalla(1, 1, "Quito obstaculo");
+  detenerse();
   moverServoGolpe(-1); // Mueve a la izquierda
   delay(250);          
   moverServoGolpe(0);  // Centra el servo
