@@ -6,8 +6,8 @@
 
 #define distanciaObstaculo 10
 #define umbralLinea 150
-#define velocidad 136
-#define tiempoMoverse 0
+#define velocidad 30
+#define tiempoMoverse 3
 
 void setup() {
   Serial.begin(9600);
@@ -53,7 +53,12 @@ void seguirLinea() {
   int valorCentral = leerSensorLineaCentral();
   int valorIzquierdo = leerSensorLineaIzquierdo();
   int valorDerecho = leerSensorLineaDerecho();
-  if()
+
+  if (valorIzquierdo < umbralLinea && valorDerecho < umbralLinea){
+    avanzar(velocidad);
+    return;
+  }
+
   if(valorIzquierdo > umbralLinea && valorDerecho > umbralLinea ){
     avanzar(velocidad);
     //escribirPantalla(1, 1, "Avanzando");
@@ -67,6 +72,7 @@ void seguirLinea() {
     //escribirPantalla(1, 1, "Derecha");
     delay(tiempoMoverse);
     }
+
   }
 
 
@@ -86,13 +92,13 @@ void buscarObstaculos() {
   int DistSonar;
   DistSonar = leerDistanciaSonar();
 
-/*   for (int i = 45; i <= 120; i++) {
+ for (int i = 45; i <= 120; i++) {
     DistSonar = leerDistanciaSonar();
     Serial.println(DistSonar);
     //mostrarPantallaDist(DistSonar);
-    moverServoYaw(i); */
+    moverServoYaw(i);
     comprobarSeguimiento(DistSonar);
-/*   }
+  }
 
   for (int i = 120; i > 45; i--) {
     DistSonar = leerDistanciaSonar();
@@ -100,7 +106,7 @@ void buscarObstaculos() {
     //mostrarPantallaDist(DistSonar);
     moverServoYaw(i);
     comprobarSeguimiento(DistSonar);
-  } */
+  } 
 }
 
 void loop() {

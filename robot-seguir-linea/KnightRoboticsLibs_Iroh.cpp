@@ -116,7 +116,7 @@ void avanzar(int vel){
 
   digitalWrite(motorIzquierdo1, HIGH);
   digitalWrite(motorDerecho1, HIGH);
-  analogWrite(motorIzquierdo2, vel);
+  analogWrite(motorIzquierdo2, vel - reduccionvelDerecha);
   analogWrite(motorDerecho2, vel + reduccionvelDerecha );
 
 }
@@ -199,7 +199,7 @@ void girarIzquierda(int vel){
   digitalWrite(motorIzquierdo2, LOW);
   digitalWrite(motorDerecho1, HIGH);
   analogWrite(motorIzquierdo1, 0);
-  analogWrite(motorDerecho2, vel);
+  analogWrite(motorDerecho2, vel- reduccionvelDerecha);
 
 }
 
@@ -548,6 +548,3 @@ void pausa(int tiempo){
 	delay(tiempo);
 
 };
-
-
-	
