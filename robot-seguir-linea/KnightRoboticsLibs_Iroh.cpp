@@ -326,12 +326,14 @@ void inicializarPantallaRobot(){
   if (versionPantalla == 1){
      lcd.init();               
      lcd.backlight(); 
-     escribirPantalla(1, 0, "Serllet - Benjamin");
+     escribirPantalla(0, 0, "Serllet - Benja");
+     escribirPantalla(2, 1, "IoT Robot");
      }
   else if(versionPantalla == 2){
      lcd2.init();               
      lcd2.backlight(); 
-     escribirPantalla(1, 0, "Serllet - Benjamin");
+     escribirPantalla(0, 0, "Serllet - Benja");
+      escribirPantalla(2, 1, "IoT Robot");
      }
   
   //delay(1000);
